@@ -44,43 +44,46 @@ pen.speed(0)
 pen.color("blue")
 
 pen.hideturtle()
+pen.penup()
 pen.goto(0, 240)
 pen.write("score", align="center", font=('Arial', 24, 'normal'))
-
 
 # LeftPaddle Movement
 def leftUp():
     y = leftPaddle.ycor()
-    if y > 200 or y == 200:
-        y = 230
+    if y > 200:
+        y = 300
         leftPaddle.sety(y)
     else:
-
         y = y + 90
         leftPaddle.sety(y)
 
-
-
 def leftDown():
     y = leftPaddle.ycor()
-    if y < -600:
-        y = -600
+    if y < -200:
+        y = -300
         leftPaddle.sety(y)
     else:
         y = y - 90
         leftPaddle.sety(y)
 
-
 def rightUp():
     y = rightPaddle.ycor()
-    y = y + 90
-    rightPaddle.sety(y)
+    if y > 200:
+        y = 300
+        rightPaddle.sety(y)
+    else:
+        y = y + 90
+        rightPaddle.sety(y)
 
 def rightDown():
     y = rightPaddle.ycor()
-    y = y - 90
-    rightPaddle.sety(y)
-
+    if y < -200:
+        y = -300
+        rightPaddle.sety(y)
+    else:
+        y = y - 90
+        rightPaddle.sety(y)
 
 window.listen()
 window.onkeypress(leftUp, 'w')
@@ -111,22 +114,21 @@ while True:
 
     if (ball.xcor()) < -390:  # Left width paddle Border
         ball.goto(0, 0)
-        ball_dx = ball_dx * -1
         playerBscore = playerBscore + 1
         pen.clear()
         pen.write("Player A: {}                   Player B: {} ".format(playerAscore, playerBscore),
                   align="center", font=('Monaco', 24, "normal"))
         os.system("afplay wallhit.wav&")
 
-        # Paddle Collisions
-        if (ball.xcor() > 340) and (ball.xcor() < 350) and (
-                rightPaddle.ycor() + 40 > ball.ycor() > rightPaddle.ycor() - 40):
-            ball.setx(340)
-            ball_dx = ball_dx * - 1
-            os.system("afplay paddle.wav&")
+    # Paddle Collisions
+    if (ball.xcor() > 340) and (ball.xcor() < 350) and (
+            rightPaddle.ycor() + 40 > ball.ycor() > rightPaddle.ycor() - 40):
+        ball.setx(340)
+        ballxDirection = -ballxDirection
+        os.system("afplay paddle.wav&")
 
-        if (ball.xcor() < -340) and (ball.xcor() > -350) and (
-                leftPaddle.ycor() + 40 > ball.ycor() > leftPaddle.ycor() - 40):
-            ball.setx(-340)
-            ball_dx = ball_dx * - 1
-            os.system("afplay paddle.wav&")
+    if (ball.xcor() < -340) and (ball.xcor() > -350) and (
+            leftPaddle.ycor() + 40 > ball.ycor() > leftPaddle.ycor() - 40):
+        ball.setx(-340)
+        ballxDirection = -ballxDirection
+        os.system("afplay paddle.wav&")
